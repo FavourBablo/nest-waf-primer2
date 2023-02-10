@@ -1,0 +1,226 @@
+
+{% extends "layout.html" %}
+
+{% block body %}
+
+<div class="grid-container">
+    <div class="navigation-bar grid-item-row-1">
+        <div class="navigation-bar-left">
+            <div>
+                <a href="home.html" class="active">Home</a>
+            </div>
+            <div>
+                <a href="about-us.html">About Us</a>
+            </div>
+            <div>
+                <a href="create-user.html">Create Biodata Form</a>
+            </div>
+        <div class="navigation-bar-right">
+            <div>
+                <input type="search">
+                <button>Search</button>
+            </div>
+
+        </div>
+    </div>
+    <div class="grid-item-row-2">
+        <form class="box" id="createBiodataForm" action="/biodata" method="POST">
+            <fieldset id="createBiodataFormFieldSet" class="container">
+                <div class="field">
+                    <label class="label">First name:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="firstName" name="firstName" type="text" placeholder="First name" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Middle name:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="middleName" name="middleName" type="text" placeholder="Middle name">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Last name:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="lastName" name="lastName" type="text" placeholder="Last name">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Date of birth:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id=" dateOfBirth" name="dateofbirth" type="date" placeholder="Date of birth" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">State of birth:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id=" stateOfBirth" name=" stateOfBirth" type="text" placeholder=" State of Birth" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Town of birth:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="townOfBirth" name="townOfBirth" type="text" placeholder="Town of Birth" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Main Phone Number:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="mainphonenumber" name="phone" type="number" placeholder="Phone Number" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">profession:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="profession:" name="profession:" type="text" placeholder="profession">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">VoterId:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="voterid" name="voterid" type="text" placeholder="VoterId">
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Wardid:</label>
+                    <div class="control has-icons-right">
+                        <input class="input" id="wardid" name="wardid" type="text" placeholder="Ward Id">
+                    </div>
+                </div>
+                
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button type="submit" id="submitCreateBiodataForm" class="button is-link is-small">Submit</button>
+                    </div>
+                    <div class="control">
+                        <button type="reset" class="button is-light is-small">Clear</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        
+    </div>
+</div>
+
+
+<section class="section">
+    <div class="container">
+        <div id="notification" class="notification container is-hidden animated slideInUp">
+            <button class="delete"></button>
+            <div id="notificationMessage">
+                {{notificationMessage}}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+{% endblock %}
+
+<script>
+    const createBiodataForm = document.getElementById('createBiodataForm');
+
+    createBiodataForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    //Get fields and check validities
+    const firstName = document.getElementById('firstName').value;
+    if (firstName == '') {
+        firstName.reportValidity();
+        return false;
+    }
+
+    const middleName = document.getElementById(' middleName').value;
+    
+    const lastName = document.getElementById('lastName').value;
+    if (lastName == '') {
+        lastName.reportValidity();
+        return false;
+    }
+
+    const stateOfBirth = document.getElementById('stateOfBirth').value;
+    if (stateOfBirth== '') {
+        stateOfBirth.reportValidity();
+        return false;
+    }
+
+    const dateOfBirth = document.getElementById('dateOfBirth').value;
+    if (dateOfBirth == '') {
+        dateOfBirth.reportValidity();
+        return false;
+    }
+    const townOfBirth = document.getElementById('townOfBirth').value;
+    if (townOfBirth == '') {
+        townOfBirth.reportValidity();
+        return false;
+    }
+    const residenceaddress = document.getElementById('residenceaddress').value;
+    if ( residenceaddress == '') {
+        residenceaddress.reportValidity();
+        return false;
+    }
+    const primaryphonenumber = document.getElementById('primaryphonenumber').value;
+    if (primaryphonenumber == '') {
+        primaryphonenumber.reportValidity();
+        return false;
+    }
+    const profession = document.getElementById('profession').value;
+    if (profession == '') {
+        profession.reportValidity();
+        return false;
+    }
+    const voterid = document.getElementById('voterid').value;
+    if (voterid == '') {
+        voterid.reportValidity();
+        return false;
+    }
+    const wardid = document.getElementById('wardid').value;
+    if (wardid == '') {
+        wardid.reportValidity();
+        return false;
+    }
+    
+    //start the button spinner
+    document.getElementById("submitCreateBiodataForm").classList.add("is-loading");
+
+    //prepare init for fetch
+    const init = {
+        method: 'Post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        //credentials: 'same-origin',
+        body: JSON.stringify({ firstName, middleName, lastName, stateOfBirth, dateOfBirth,townOfBirth, residenceaddress, primaryphonenumber, profession, voterid, wardid })
+    }
+
+    //call fetch
+    fetch('/biodata', init)
+        .then(response => response.json())
+        .then(data => {
+            //alert(JSON.stringify(data))
+            //remove spinner class
+            document.getElementById("submitCreateBiodataForm").classList.remove("is-loading");
+            //set notification
+            document.getElementById("notificationMessage").innerHTML = 'Biodata creation successful';
+            //add notification color class sent
+            document.getElementById("notification").classList.add("is-success");
+            //remove is-hidden from notificationWrapper
+            document.getElementById("notification").classList.remove("is-hidden");
+
+        })
+        .catch(error => {
+            //remove spinner class
+            document.getElementById("submitCreateBiodataForm").classList.remove("is-loading");
+
+            document.getElementById("notificationMessage").innerHTML = error.message;
+            //add notification color class sent
+            document.getElementById("notification").classList.add("is-danger");
+            //remove is-hidden from notificationWrapper
+            document.getElementById("notification").classList.remove("is-hidden");
+
+        });
+    })
+
+</script>
